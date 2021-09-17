@@ -1,0 +1,12 @@
+*EE308 LAB2 Solution
+*EE1 He Haoyuan(Howell)
+*
+
+lab 分成三个部分
+
+1.Git 和 GitHub 的使用
+
+git bash 初次使用
+https://www.cnblogs.com/crazytata/p/10083716.html
+
+2.代码与算法实现
