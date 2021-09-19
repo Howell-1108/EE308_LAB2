@@ -72,64 +72,71 @@ public class EE308_Lab2 {
                     endIndex = i;
                     String currentWord = line.substring(headIndex, endIndex);
                     System.out.println(currentWord);
-//                    switch (currentWord){
-//                        case "if":
-//                            keywordTotalNum++;
-//                            ifelseArray[++arrayLen] = 1;
-//                            positionArray[arrayLen] = headIndex;
-//                        case "else":
-//                            if(line.substring(headIndex, endIndex+3).equals("else if")){
-//                                keywordTotalNum ++;
-//                                ifelseArray[++arrayLen] = 1;
-//                                positionArray[arrayLen] = headIndex;
-////                                if(! elseifFlag){
-////                                    elseifFlag = true;
-////                                    elseifNum++;
-////                                }
-//                                // 这里还要写关于if elseif else 的栈操作
-//                            }else{
-//                                keywordTotalNum++;
-//                                elseNum++;
-////                                elseifFlag = false;
-//                            }
-//                            break;
-//                        case "switch":
-//                            keywordTotalNum++;
-//                            switchNum++;
-//                            break;
-//                        case "case":
-//                            keywordTotalNum++;
-//                            caseNum[switchNum]++;
-//                            break;
-//                        default:
-//                            for(String str:keywords){
-//                                if(currentWord.equals(str)){
-//                                    keywordTotalNum++;
-//                                    break;
-//                            }
-//                        }
-//                    }
-//                    inWord = false;
-//                    i = endIndex;
-
-
-                    if(currentWord.equals("else")){
-                        // check if the "else" follows a " if" (a "else if")
-                        if(line.substring(headIndex, endIndex+3).equals("else if")){
-                            keywordTotalNum += 2;
-                            // 这里还要写关于if elseif else 的栈操作
-                        }else{
+                    switch (currentWord){
+                        case "if":
                             keywordTotalNum++;
-                        }
-                    }else if(currentWord.equals("")){
-                    }else{
-                        for(String str:keywords){
-                            if(currentWord.equals(str)){
+                            System.out.println("***");
+                            ifelseArray[++arrayLen] = 1;
+                            positionArray[arrayLen] = headIndex;
+                            break;
+                        case "else":
+                            if(line.substring(headIndex, endIndex+3).equals("else if")){
+                                keywordTotalNum ++;
+                                System.out.println("***");
+                                ifelseArray[++arrayLen] = 1;
+                                positionArray[arrayLen] = headIndex;
+//                                if(! elseifFlag){
+//                                    elseifFlag = true;
+//                                    elseifNum++;
+//                                }
+                                // 这里还要写关于if elseif else 的栈操作
+                            }else{
                                 keywordTotalNum++;
-                                break;
+                                System.out.println("***");
+                                elseNum++;
+//                                elseifFlag = false;
+                            }
+                            break;
+                        case "switch":
+                            keywordTotalNum++;
+                            System.out.println("***");
+                            switchNum++;
+                            break;
+                        case "case":
+                            keywordTotalNum++;
+                            System.out.println("***");
+                            caseNum[switchNum]++;
+                            break;
+                        default:
+                            for(String str:keywords){
+                                if(currentWord.equals(str)){
+                                    keywordTotalNum++;
+                                    System.out.println("***");
+                                    break;
                             }
                         }
                     }
+                    inWord = false;
+                    i = endIndex;
+
+
+//                    if(currentWord.equals("else")){
+//                        // check if the "else" follows a " if" (a "else if")
+//                        if(line.substring(headIndex, endIndex+3).equals("else if")){
+//                            keywordTotalNum += 2;
+//                            // 这里还要写关于if elseif else 的栈操作
+//                        }else{
+//                            keywordTotalNum++;
+//                        }
+//                    }else if(currentWord.equals("")){
+//                    }else{
+//                        for(String str:keywords){
+//                            if(currentWord.equals(str)){
+//                                keywordTotalNum++;
+//                                break;
+//                            }
+//                        }
+//                    }
                 }
             }
         }
