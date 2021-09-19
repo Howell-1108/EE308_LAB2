@@ -1,8 +1,9 @@
+//package EE308_Lab2;
+//
 //import java.util.HashSet;
 //
-//public class HashSetTest {
-//    public static void main(String[] args) {
-//        HashSet<String> keywords = new HashSet<String>();
+//public class KeyWordUtil {
+//    public class static void InitKeyWordUtil (){
 //        keywords.add("auto");
 //        keywords.add("break");
 //        keywords.add("case");
@@ -35,11 +36,5 @@
 //        keywords.add("void");
 //        keywords.add("volatile");
 //        keywords.add("while");
-//
-//        for(String i : keywords){
-//            if(i.equals("if") || i.equals("else")){
-//                System.out.println(i);
-//            }
-//        }
 //    }
 //}
