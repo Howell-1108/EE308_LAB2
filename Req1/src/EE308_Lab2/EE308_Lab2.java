@@ -10,9 +10,9 @@ public class EE308_Lab2 {
     static int elseifNum = 0;
 //    static boolean elseifFlag = false;
     static int elseNum = 0;
-    static int [] ifelseArray = new int [500];
-    static int [] positionArray = new int [500];
-    static int arrayLen = 0;
+    static int [] ifelseStack = new int [500];
+//    static int [] positionArray = new int [500];
+    static int stackLen = 0;
 
 
     // init the keyword util
@@ -71,20 +71,21 @@ public class EE308_Lab2 {
                 if(inWord){
                     endIndex = i;
                     String currentWord = line.substring(headIndex, endIndex);
-                    System.out.println(currentWord);
+//                    System.out.println(currentWord);
                     switch (currentWord){
                         case "if":
                             keywordTotalNum++;
-                            System.out.println("***");
-                            ifelseArray[++arrayLen] = 1;
-                            positionArray[arrayLen] = headIndex;
+                            ifelseStack[++stackLen] = 1;
+//                            System.out.println("***");
+//                            ifelseArray[++arrayLen] = 1;
+//                            positionArray[arrayLen] = headIndex;
                             break;
                         case "else":
                             if(line.substring(headIndex, endIndex+3).equals("else if")){
                                 keywordTotalNum ++;
-                                System.out.println("***");
-                                ifelseArray[++arrayLen] = 1;
-                                positionArray[arrayLen] = headIndex;
+//                                System.out.println("***");
+//                                ifelseArray[++arrayLen] = 1;
+//                                positionArray[arrayLen] = headIndex;
 //                                if(! elseifFlag){
 //                                    elseifFlag = true;
 //                                    elseifNum++;
@@ -92,26 +93,26 @@ public class EE308_Lab2 {
                                 // 这里还要写关于if elseif else 的栈操作
                             }else{
                                 keywordTotalNum++;
-                                System.out.println("***");
+//                                System.out.println("***");
                                 elseNum++;
 //                                elseifFlag = false;
                             }
                             break;
                         case "switch":
                             keywordTotalNum++;
-                            System.out.println("***");
+//                            System.out.println("***");
                             switchNum++;
                             break;
                         case "case":
                             keywordTotalNum++;
-                            System.out.println("***");
+//                            System.out.println("***");
                             caseNum[switchNum]++;
                             break;
                         default:
                             for(String str:keywords){
                                 if(currentWord.equals(str)){
                                     keywordTotalNum++;
-                                    System.out.println("***");
+//                                    System.out.println("***");
                                     break;
                             }
                         }
@@ -151,7 +152,7 @@ public class EE308_Lab2 {
         String filePath;
         System.out.println("Enter the path of file.");
         filePath = conReader.readLine();
-        System.out.println("The file is :"+filePath);
+//        System.out.println("The file is :"+filePath);
 
         int requireLevel;
         System.out.println("Enter the level of requirement:");
@@ -161,7 +162,7 @@ public class EE308_Lab2 {
             System.out.println("Enter the level of requirement:");
             requireLevel = conReader.read();
         }
-        System.out.println("The requirement level is "+requireLevel);
+//        System.out.println("The requirement level is "+requireLevel);
 
         // read line by line from ordered file
         FileReader fileReader = new FileReader(filePath);
@@ -178,12 +179,18 @@ public class EE308_Lab2 {
         fileReader.close();
 
         System.out.println("total num:"+keywordTotalNum);
-        System.out.println("switch num:"+switchNum);
-        System.out.print("case num:");
-        for(int i = 1; i <= switchNum; i++){
-            System.out.print(caseNum[i]+" ");
+        if(requireLevel >= 2){
+            System.out.println("switch num:"+switchNum);
+            System.out.print("case num:");
+            for(int i = 1; i <= switchNum; i++){
+                System.out.print(caseNum[i]+" ");
+            }
         }
-        System.out.println("\nif-else num:"+(elseNum-elseifNum));
-        System.out.println("if-elseif-else num:"+elseifNum);
+        if(requireLevel >= 3){
+            System.out.println("\nif-else num:"+(elseNum-elseifNum));
+        }
+        if(requireLevel == 4){
+            System.out.println("if-elseif-else num:"+elseifNum);
+        }
     }
 }
