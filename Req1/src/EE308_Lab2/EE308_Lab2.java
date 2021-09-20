@@ -9,12 +9,11 @@ public class EE308_Lab2 {
     static int [] caseNum = new int[500];
     static int elseifNum = 0;
 //    static boolean elseifFlag = false;
-    static int elseNum = 0;
-    static int [] ifelseStack = new int [500];
 //    static int [] positionArray = new int [500];
+    static int elseNum = 0;
+    static int [] ifelseStack = new int [5000];
     static int stackLen = 0;
     static boolean annotationFlag = false;
-
 
     // init the keyword util
     public static void InitKeyWordUtil(HashSet<String> keywords){
@@ -57,6 +56,60 @@ public class EE308_Lab2 {
         return c >= 'a' && c <= 'z';
     }
 
+    public static void WorkOnStack(){
+        int [] currentStack = new int [4000];
+        int now=0;
+        for(int i = 1 ; i <= stackLen ; i++){
+            switch (ifelseStack[i]){
+                case 3:
+                    if(currentStack[now-1] == 2){
+                        now -= 4;
+                        if(currentStack[now] != 0){
+                            currentStack[++now] = 0;
+                        }
+                        elseifNum++;
+                    }else if(currentStack[now-1] == 1){
+                        now -= 2;
+                        if(currentStack[now] != 0){
+                            currentStack[++now] = 0;
+                        }
+                        elseNum++;
+                    }
+                case 2:
+                    if(currentStack[now] != 0 || currentStack[now-1] != 2){
+                        currentStack[++now] = 2;
+                    }
+                    break;
+                case 9:
+                    if(currentStack[now] == 6){
+                        if(currentStack[now-1] != 0){
+                            currentStack[now] = 0;
+                        }else{
+                            now--;
+                        }
+                    }else if(currentStack[now] == 0 && currentStack[now-1] == 6){
+                        if(currentStack[now-2] != 0){
+                            currentStack[now-1] = 0;
+                        }else{
+                            now -= 2;
+                        }
+                    }
+                    break;
+                case 0:
+                    if(currentStack[now] != 0){
+                        currentStack[++now] = 0;
+                    }
+                    break;
+                case 1:
+                    currentStack[++now] = ifelseStack[i];
+                    break;
+                case 6:
+                    currentStack[++now] = ifelseStack[i];
+                    break;
+            }
+        }
+}
+
     public static void HandleLine(String line, HashSet <String> keywords){
         int lineLen = line.length();
         int headIndex = 0;
@@ -76,6 +129,7 @@ public class EE308_Lab2 {
             }else{
                 if(line.charAt(i) == '*' && line.charAt(i+1) == '/'){
                     annotationFlag = false;
+                    //这里还有东西要写
                 }
             }
         }
@@ -85,7 +139,7 @@ public class EE308_Lab2 {
         int stringMark = 1;
         while(stringMark != -1){
             stringMark = -1;
-            System.out.println(line);
+//            System.out.println(line);
             for(int i = 0; i < lineLen ; i++){
                 if(line.charAt(i) == '"'){
                     if(stringMark == -1){
@@ -99,9 +153,21 @@ public class EE308_Lab2 {
             }
         }
 
-        System.out.println(line);
         for (int i = 0; i < lineLen; i++){
-            System.out.println(lineLen);
+//            switch (line.charAt(i)) {
+//                case '{':
+//                    ifelseStack[++stackLen] = 6;
+//                    break;
+//                case '}':
+//                    ifelseStack[++stackLen] = 9;
+//                    break;
+//                case ';':
+//                    if (ifelseStack[stackLen] != 0) {
+//                        ifelseStack[++stackLen] = 0;
+//                    }
+//                    break;
+//            }
+
             if(IsWord(line.charAt(i))){
                 if(!inWord){
                     headIndex = i;
@@ -116,70 +182,62 @@ public class EE308_Lab2 {
                         case "if":
                             keywordTotalNum++;
                             ifelseStack[++stackLen] = 1;
-//                            ifelseArray[++arrayLen] = 1;
-//                            positionArray[arrayLen] = headIndex;
+                            i = endIndex;
                             break;
                         case "else":
                             if(line.substring(headIndex, endIndex+3).equals("else if")){
-                                keywordTotalNum ++;
-//                                ifelseArray[++arrayLen] = 1;
-//                                positionArray[arrayLen] = headIndex;
-//                                if(! elseifFlag){
-//                                    elseifFlag = true;
-//                                    elseifNum++;
-//                                }
-                                // 这里还要写关于if elseif else 的栈操作
+                                keywordTotalNum +=2;
+                                ifelseStack[++stackLen] = 2;
+                                i = endIndex+3;
                             }else{
                                 keywordTotalNum++;
-//                                System.out.println("***");
-                                elseNum++;
-//                                elseifFlag = false;
+//                                while(ifelseStack[stackLen] != 2)
+                                ifelseStack[++stackLen] = 3;
+                                i = endIndex;
                             }
                             break;
                         case "switch":
                             keywordTotalNum++;
-//                            System.out.println("***");
+//                                    System.out.println("switch");
                             switchNum++;
+                            i = endIndex;
                             break;
                         case "case":
+//                                    System.out.println("case");
                             keywordTotalNum++;
-//                            System.out.println("***");
                             caseNum[switchNum]++;
+                            i = endIndex;
                             break;
                         default:
+//                                    System.out.println(currentWord);
                             for(String str:keywords){
                                 if(currentWord.equals(str)){
+//                                            System.out.println("OK!\n");
                                     keywordTotalNum++;
-//                                    System.out.println("***");
                                     break;
+                                }
                             }
-                        }
+                            i = endIndex;
                     }
                     inWord = false;
-                    i = endIndex;
-
-
-//                    if(currentWord.equals("else")){
-//                        // check if the "else" follows a " if" (a "else if")
-//                        if(line.substring(headIndex, endIndex+3).equals("else if")){
-//                            keywordTotalNum += 2;
-//                            // 这里还要写关于if elseif else 的栈操作
-//                        }else{
-//                            keywordTotalNum++;
-//                        }
-//                    }else if(currentWord.equals("")){
-//                    }else{
-//                        for(String str:keywords){
-//                            if(currentWord.equals(str)){
-//                                keywordTotalNum++;
-//                                break;
-//                            }
-//                        }
-//                    }
                 }
+            }
+            switch (line.charAt(i)) {
+                case '{':
+                    ifelseStack[++stackLen] = 6;
+                    break;
+                case '}':
+                    ifelseStack[++stackLen] = 9;
+                    break;
+                case ';':
+                    if (ifelseStack[stackLen] != 0) {
+                        ifelseStack[++stackLen] = 0;
+                    }
+                    break;
             }
         }
     }
+
     public static void main(String[] args) throws IOException {
         HashSet <String> keywords = new HashSet<String>();
         InitKeyWordUtil(keywords);
@@ -190,7 +248,6 @@ public class EE308_Lab2 {
         String filePath;
         System.out.println("Enter the path of file.");
         filePath = conReader.readLine();
-//        System.out.println("The file is :"+filePath);
 
         int requireLevel;
         System.out.println("Enter the level of requirement:");
@@ -200,7 +257,6 @@ public class EE308_Lab2 {
             System.out.println("Enter the level of requirement:");
             requireLevel = conReader.read();
         }
-//        System.out.println("The requirement level is "+requireLevel);
 
         // read line by line from ordered file
         FileReader fileReader = new FileReader(filePath);
@@ -208,9 +264,7 @@ public class EE308_Lab2 {
         String line = bufferedReader.readLine();
 
         while(line != null){
-//            System.out.println(line);
             HandleLine(line,keywords);
-//            System.out.println(keywordTotalNum);
             line = bufferedReader.readLine();
         }
         bufferedReader.close();
@@ -225,10 +279,35 @@ public class EE308_Lab2 {
             }
         }
         if(requireLevel >= 3){
-            System.out.println("\nif-else num:"+(elseNum-elseifNum));
+            WorkOnStack();
+            System.out.println("\nif-else num:"+elseNum);
         }
         if(requireLevel == 4){
-            System.out.println("if-elseif-else num:"+elseifNum);
+//            for(int i=1;i<=stackLen;i++){
+//                switch (ifelseStack[i]){
+//                    case 3:
+//                        System.out.print("else ");
+//                        break;
+//                    case 2:
+//                        System.out.print("else if ");
+//                        break;
+//                    case 1:
+//                        System.out.print("if ");
+//                        break;
+//                    case 0:
+//                        System.out.print("; ");
+//                        break;
+//                    case 9:
+//                        System.out.print("} ");
+//                        break;
+//                    case 6:
+//                        System.out.print("{ ");
+//                        break;
+//                    default:
+//                }
+//            }
+            System.out.println("\nif-elseif-else num:"+elseifNum);
         }
     }
 }
+//System.out.print(ifelseStack[i]);
