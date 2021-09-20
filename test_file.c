@@ -4,6 +4,7 @@ int main(){
     double j=0;  
     long f;  
     switch(i){  
+11111*"wswwawawawawa if  else if  wwawawawawawaw";11111
         case 0:  
             break;  
         case 1:  
@@ -37,4 +38,7 @@ int main(){
     }  
     return 0;  
 }  
+
+
+
 

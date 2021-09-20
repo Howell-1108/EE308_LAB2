@@ -13,6 +13,7 @@ public class EE308_Lab2 {
     static int [] ifelseStack = new int [500];
 //    static int [] positionArray = new int [500];
     static int stackLen = 0;
+    static boolean annotationFlag = false;
 
 
     // init the keyword util
@@ -61,7 +62,46 @@ public class EE308_Lab2 {
         int headIndex = 0;
         int endIndex = 0;
         boolean inWord = false;
+
+        // dealing with annotation
+        for(int i = 0; i < lineLen ; i++){
+            if(!annotationFlag){
+                if(line.charAt(i) == '/' && line.charAt(i+1) == '/'){
+                    lineLen=i;
+                    break;
+                }
+                if(line.charAt(i) == '/' && line.charAt(i+1) == '*'){
+                    annotationFlag = true;
+                }
+            }else{
+                if(line.charAt(i) == '*' && line.charAt(i+1) == '/'){
+                    annotationFlag = false;
+                }
+            }
+        }
+        if(annotationFlag) return ;
+
+        // dealing with strings
+        int stringMark = 1;
+        while(stringMark != -1){
+            stringMark = -1;
+            System.out.println(line);
+            for(int i = 0; i < lineLen ; i++){
+                if(line.charAt(i) == '"'){
+                    if(stringMark == -1){
+                        stringMark = i;
+                    }else{
+                        line = line.substring(0,stringMark) + line.substring(i+1, lineLen);
+                        lineLen -= (i - stringMark+1);
+                        stringMark = -1;
+                    }
+                }
+            }
+        }
+
+        System.out.println(line);
         for (int i = 0; i < lineLen; i++){
+            System.out.println(lineLen);
             if(IsWord(line.charAt(i))){
                 if(!inWord){
                     headIndex = i;
@@ -76,14 +116,12 @@ public class EE308_Lab2 {
                         case "if":
                             keywordTotalNum++;
                             ifelseStack[++stackLen] = 1;
-//                            System.out.println("***");
 //                            ifelseArray[++arrayLen] = 1;
 //                            positionArray[arrayLen] = headIndex;
                             break;
                         case "else":
                             if(line.substring(headIndex, endIndex+3).equals("else if")){
                                 keywordTotalNum ++;
-//                                System.out.println("***");
 //                                ifelseArray[++arrayLen] = 1;
 //                                positionArray[arrayLen] = headIndex;
 //                                if(! elseifFlag){

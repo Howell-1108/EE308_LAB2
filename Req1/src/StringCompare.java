@@ -74,3 +74,15 @@ public class StringCompare {
 //                currentWord = null;
 //            }
 //        }
+
+/* ///*/
+//   /*
+
+//
+//    if(i<0)
+//		if (i>2) printf(" ");
+//        else if (i==2) printf(" ");
+//        else if (i>1) printf(" ");
+//        else printf(" ");
+//    else
+//    	printf(" ");
