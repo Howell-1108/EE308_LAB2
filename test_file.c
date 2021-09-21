@@ -1,9 +1,13 @@
 #include <stdio.h>  
 int main(){  
 	int;
+	&^()
+12345 //8077907907
+	/* 
     int i=1;  
     double j=0;  
     long f;  
+    */
     if(i<0){  
         printf(" ");
     }  

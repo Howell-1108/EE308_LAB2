@@ -108,66 +108,123 @@ public class EE308_Lab2 {
                     break;
             }
         }
-}
+    }
+
+    public static String DeleteLineAnnotation(String str){
+        for(int i = 0; i < str.length() ;i++){
+            if(str.charAt(i) == '/' && str.charAt(i) == '/'){
+                return str.substring(0,i);
+            }
+        }
+        return str;
+    }
+
+    public static String DeleteBarAnnotation(String str){
+        StringBuilder sb = new StringBuilder(200);
+        for(int i = 0; i < str.length() ;i++){
+            if(!annotationFlag){
+                if(str.charAt(i) == '/' && str.charAt(i) == '*'){
+                    annotationFlag = true;
+                }else{
+                    sb.append(str.charAt(i));
+                }
+            }else{
+                if(str.charAt(i) == '*' && str.charAt(i) == '/'){
+                    i++;
+                    annotationFlag = false;
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String DeleteInsideString(String str){
+        StringBuilder sb = new StringBuilder(200);
+        for(int i = 0; i < str.length() ;i++){
+            if(!annotationFlag){
+                if(str.charAt(i) == '"' && str.charAt(i) == '"'){
+                    annotationFlag = true;
+                    i++;
+                }else{
+                    sb.append(str.charAt(i));
+                }
+            }else{
+                if(str.charAt(i) == '"' && str.charAt(i) == '"'){
+                    i++;
+                    annotationFlag = false;
+                }
+            }
+        }
+        return sb.toString();
+    }
+
 
     public static void HandleLine(String line, HashSet <String> keywords){
-        int lineLen = line.length();
+
         int headIndex = 0;
         int endIndex = 0;
         boolean inWord = false;
-
-        // dealing with annotation
-        for(int i = 0; i < lineLen ; i++){
-            if(!annotationFlag){
-                if(line.charAt(i) == '/' && line.charAt(i+1) == '/'){
-                    lineLen=i;
-                    break;
-                }
-                if(line.charAt(i) == '/' && line.charAt(i+1) == '*'){
-                    annotationFlag = true;
-                }
-            }else{
-                if(line.charAt(i) == '*' && line.charAt(i+1) == '/'){
-                    annotationFlag = false;
-                    //这里还有东西要写
-                }
-            }
-        }
-        if(annotationFlag) return ;
-
-        // dealing with strings
-        int stringMark = 1;
-        while(stringMark != -1){
-            stringMark = -1;
+        line = DeleteLineAnnotation(line);
+        line = DeleteBarAnnotation(line);
+        line = DeleteInsideString(line);
+        int lineLen = line.length();
+//        System.out.println(line);
+//        System.out.println(line.charAt(1));
+//        int emptyTag = 0;
+//        while(line.charAt(emptyTag) == ' '){
+//            emptyTag++;
+//        }
+//        if(emptyTag != 0){
+//            line = line.substring(emptyTag);
+//        }
+//        System.out.println(line);
+//        // dealing with annotation
+//        for(int i = 0; i < lineLen ; i++){
 //            System.out.println(line);
-            for(int i = 0; i < lineLen ; i++){
-                if(line.charAt(i) == '"'){
-                    if(stringMark == -1){
-                        stringMark = i;
-                    }else{
-                        line = line.substring(0,stringMark) + line.substring(i+1, lineLen);
-                        lineLen -= (i - stringMark+1);
-                        stringMark = -1;
-                    }
-                }
-            }
-        }
-
-        for (int i = 0; i < lineLen; i++){
-//            switch (line.charAt(i)) {
-//                case '{':
-//                    ifelseStack[++stackLen] = 6;
+//            System.out.print(i);
+//            System.out.println((line.charAt(i)));
+//            if(!annotationFlag){
+//                if(line.charAt(i) == '/' && line.charAt(i+1) == '/'){
+//                    lineLen=i;
+//
+////                    System.out.println(lineLen);
+//
 //                    break;
-//                case '}':
-//                    ifelseStack[++stackLen] = 9;
-//                    break;
-//                case ';':
-//                    if (ifelseStack[stackLen] != 0) {
-//                        ifelseStack[++stackLen] = 0;
-//                    }
-//                    break;
+//                }
+//                if(line.charAt(i) == '/' && line.charAt(i+1) == '*'){
+//                    annotationFlag = true;
+//                }
+//            }else{
+//                if(line.charAt(i) == '*' && line.charAt(i+1) == '/'){
+//                    annotationFlag = false;
+//                    line = line.substring(i+2, lineLen);
+//                    lineLen -=  i;
+//                }
 //            }
+//        }
+//        if(annotationFlag) return ;
+//        System.out.println(line);
 
+//        // dealing with strings
+//        int stringMark = 1;
+//        while(stringMark != -1){
+//            stringMark = -1;
+////            System.out.println(line);
+//            for(int i = 0; i < lineLen ; i++){
+//                if(line.charAt(i) == '"'){
+//                    if(stringMark == -1){
+//                        stringMark = i;
+//                    }else{
+//                        line = line.substring(0,stringMark) + line.substring(i+1, lineLen);
+//                        lineLen -= (i - stringMark+1);
+//                        stringMark = -1;
+//                    }
+//                }
+//            }
+//        }
+
+//        System.out.println(line);
+        for (int i = 0; i < lineLen; i++){
             if(IsWord(line.charAt(i))){
                 if(!inWord){
                     headIndex = i;
@@ -264,11 +321,14 @@ public class EE308_Lab2 {
         String line = bufferedReader.readLine();
 
         while(line != null){
+//            System.out.println("before"+line);
             HandleLine(line,keywords);
             line = bufferedReader.readLine();
         }
         bufferedReader.close();
         fileReader.close();
+
+
 
         System.out.println("total num:"+keywordTotalNum);
         if(requireLevel >= 2){
