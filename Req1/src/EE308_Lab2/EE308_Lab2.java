@@ -12,6 +12,7 @@ public class EE308_Lab2 {
     static int [] ifelseStack = new int [5000];
     static int stackLen = 0;
     static boolean annotationFlag = false;
+    static boolean stringFlag = false;
 
     // this function is to init the keywords list
     public static void InitKeyWordUtil(HashSet<String> keywords){
@@ -125,6 +126,7 @@ public class EE308_Lab2 {
     }
 
     // delete "//" and following content in this line
+
     public static String DeleteLineAnnotation(String str){
         for(int i = 0; i < str.length() ;i++){
             if(str.charAt(i) == '/' && str.charAt(i) == '/'){
@@ -140,13 +142,13 @@ public class EE308_Lab2 {
         StringBuilder sb = new StringBuilder(200);
         for(int i = 0; i < str.length() ;i++){
             if(!annotationFlag){
-                if(str.charAt(i) == '/' && str.charAt(i) == '*'){
+                if(str.charAt(i) == '/' && str.charAt(i+1) == '*'){
                     annotationFlag = true;
                 }else{
                     sb.append(str.charAt(i));
                 }
             }else{
-                if(str.charAt(i) == '*' && str.charAt(i) == '/'){
+                if(str.charAt(i) == '*' && str.charAt(i+1) == '/'){
                     i++;
                     annotationFlag = false;
                 }
@@ -159,17 +161,16 @@ public class EE308_Lab2 {
     public static String DeleteInsideString(String str){
         StringBuilder sb = new StringBuilder(200);
         for(int i = 0; i < str.length() ;i++){
-            if(!annotationFlag){
-                if(str.charAt(i) == '"' && str.charAt(i) == '"'){
-                    annotationFlag = true;
+            if(!stringFlag){
+                if(str.charAt(i) == '"'){
+                    stringFlag = true;
                     i++;
                 }else{
                     sb.append(str.charAt(i));
                 }
             }else{
-                if(str.charAt(i) == '"' && str.charAt(i) == '"'){
-                    i++;
-                    annotationFlag = false;
+                if(str.charAt(i) == '"'){
+                    stringFlag = false;
                 }
             }
         }
@@ -179,16 +180,15 @@ public class EE308_Lab2 {
 
     // hanle with each line(without annotation and string)
     public static void HandleLine(String line, HashSet <String> keywords){
-        int headIndex = 0;
-        int endIndex = 0;
-        boolean inWord = false;
-
         // delete contents we don't want
         line = DeleteLineAnnotation(line);
         line = DeleteBarAnnotation(line);
         line = DeleteInsideString(line);
         int lineLen = line.length();
 
+        int headIndex = 0;
+        int endIndex = 0;
+        boolean inWord = false;
         // ergodic every char in the line
         for (int i = 0; i < lineLen; i++){
             if(IsWord(line.charAt(i))){
@@ -217,11 +217,14 @@ public class EE308_Lab2 {
                             * but actually this else and if can be far away)
                             * so it is waiting to improve
                              */
-                            if(line.substring(headIndex, endIndex+3).equals("else if")){
+//                            System.out.println(line);
+//                            System.out.println(headIndex);
+//                            System.out.println(endIndex);
+                            if (endIndex+3 <= line.length() &&line.substring(headIndex, endIndex + 3).equals("else if")) {
                                 keywordTotalNum +=2;
                                 ifelseStack[++stackLen] = 2;
                                 i = endIndex+3;
-                            }else{
+                            } else {
                                 keywordTotalNum++;
                                 ifelseStack[++stackLen] = 3;
                                 i = endIndex;
@@ -314,6 +317,28 @@ public class EE308_Lab2 {
 
         // 3rd order
         if(requireLevel >= 3){
+//            for(int i=1;i<=stackLen;i++){
+//                switch (ifelseStack[i]){
+//                    case 9:
+//                        System.out.print("}");
+//                        break;
+//                    case 6:
+//                        System.out.print("{");
+//                        break;
+//                    case 3:
+//                        System.out.print("else");
+//                        break;
+//                    case 2:
+//                        System.out.print("else if");
+//                        break;
+//                    case 1:
+//                        System.out.print("if");
+//                        break;
+//                    case 0:
+//                        System.out.print(";");
+//                        break;
+//                }
+//            }
             WorkOnStack();
             System.out.println("\nif-else num:"+elseNum);
         }
