@@ -161,14 +161,16 @@ public class EE308_Lab2 {
     public static String DeleteInsideString(String str){
         StringBuilder sb = new StringBuilder(200);
         for(int i = 0; i < str.length() ;i++){
+//            System.out.print(str.charAt(i));
+//            System.out.println(stringFlag);
             if(!stringFlag){
                 if(str.charAt(i) == '"'){
                     stringFlag = true;
-                    i++;
                 }else{
                     sb.append(str.charAt(i));
                 }
             }else{
+
                 if(str.charAt(i) == '"'){
                     stringFlag = false;
                 }
@@ -182,9 +184,11 @@ public class EE308_Lab2 {
     public static void HandleLine(String line, HashSet <String> keywords){
         // delete contents we don't want
         line = DeleteLineAnnotation(line);
-        line = DeleteBarAnnotation(line);
         line = DeleteInsideString(line);
+        line = DeleteBarAnnotation(line);
+
         int lineLen = line.length();
+//        System.out.println(line);
 
         int headIndex = 0;
         int endIndex = 0;
@@ -345,7 +349,7 @@ public class EE308_Lab2 {
 
         //4th order
         if(requireLevel == 4){
-            System.out.println("\nif-elseif-else num:"+elseifNum);
+            System.out.println("if-elseif-else num:"+elseifNum);
         }
     }
 }

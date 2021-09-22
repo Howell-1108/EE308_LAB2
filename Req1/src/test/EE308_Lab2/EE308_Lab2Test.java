@@ -91,7 +91,7 @@ public void testDeleteBarAnnotation() throws Exception {
 public void testDeleteInsideString() throws Exception {
 //TODO: Test goes here...
     Assert.assertEquals("22f2f2f2f12f",EE308_Lab2.DeleteInsideString
-            ("22f2f2f2f12f\"222222\""));
+            ("22f2f2f2f12f\"222222\"2323"));
 } 
 
 /** 
